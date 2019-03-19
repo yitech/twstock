@@ -11,7 +11,7 @@ class StockAPI:
         self.conn = sqlite3.connect(src)
         self.cursor = self.conn.cursor()
 
-    def select_table(self, symbol):
+    def select_symbol(self, symbol):
         sym = (str(symbol), )
         self.cursor.execute('''SELECT * FROM stocks WHERE 證券代號=?''', sym)
         df = pd.DataFrame(columns=["日期", "證券代號", "證券名稱", "成交股數", "成交筆數", "成交金額", "開盤價",
@@ -23,6 +23,22 @@ class StockAPI:
                 dict_data[key] = [dict_data[key]]
             pd_data = pd.DataFrame.from_dict(dict_data)
             df = df.append(pd_data)
+        df = df.reset_index(drop=True)
+        return df
+
+    def select_date(self, date):
+        date = (str(date), )
+        self.cursor.execute('''SELECT * FROM stocks WHERE 日期=?''', date)
+        df = pd.DataFrame(columns=["日期", "證券代號", "證券名稱", "成交股數", "成交筆數", "成交金額", "開盤價",
+                                   "最高價", "最低價", "收盤價", "漲跌", "漲跌價差", "最後揭示買價", "最後揭示買量",
+                                   "最後揭示賣價", "最後揭示賣量", "本益比"])
+        for row in self.cursor.fetchall():
+            dict_data = self.tuple_to_dict(row)
+            for key in dict_data.keys():
+                dict_data[key] = [dict_data[key]]
+            pd_data = pd.DataFrame.from_dict(dict_data)
+            df = df.append(pd_data)
+        df = df.reset_index(drop=True)
         return df
 
     def create_table(self):

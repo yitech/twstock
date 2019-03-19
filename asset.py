@@ -11,7 +11,7 @@ class Position(IntEnum):
 
 
 class Asset:
-    def __init__(self, ntd, src=os.path.join("data", "daily")):
+    def __init__(self, ntd, src='stock.db'):
         self.ntd = ntd
         self.possess ={}
         self.src = src
