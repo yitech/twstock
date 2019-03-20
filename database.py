@@ -174,14 +174,20 @@ class StockAPI:
             except ValueError:
                 data["最後揭示買價"] = ''
         if type(data["最後揭示買量"]) == str:
-            data["最後揭示買量"] = atoi(data["最後揭示買量"])
+            try:
+                data["最後揭示買量"] = atoi(data["最後揭示買量"])
+            except ValueError:
+                data["最後揭示買量"] = ''
         if type(data["最後揭示賣價"]) == str:
             try:
                 data["最後揭示賣價"] = atof(data["最後揭示賣價"])
             except ValueError:
                 data["最後揭示買價"] = ''
         if type(data["最後揭示賣量"]) == str:
-            data["最後揭示賣量"] = atof(data["最後揭示賣量"])
+            try:
+                data["最後揭示賣量"] = atof(data["最後揭示賣量"])
+            except ValueError:
+                data["最後揭示賣量"] = ''
         if type(data["本益比"]) == str:
             data["本益比"] = atof(data["本益比"])
         return 0

@@ -50,7 +50,7 @@ class Crawler:
 
 def main():
     crawler = Crawler()
-    crawler.build_database('20190301', '20190319')
+    crawler.build_database('20190315', '20190320')
 
 
 if __name__ == "__main__":
