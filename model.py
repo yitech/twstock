@@ -128,18 +128,18 @@ class TimeSeriesAnalysis:
         for k in self.keys:
             lgrt = sample[k + postfix]
             model = ARIMA(lgrt.values, order=(3, 1, 1))
-            model_fit = model.fit(disp=False)
+            model_fit = model.fit(disp=False, method='mle')
             self.model.update({k+postfix: model_fit})
         return 0
 
     def view_return_predict(self):
-        plt.subplots(221)
+        plt.subplot(221)
         self.plot_return_predict("開盤價")
-        plt.subplots(222)
+        plt.subplot(222)
         self.plot_return_predict("最高價")
-        plt.subplots(223)
+        plt.subplot(223)
         self.plot_return_predict("最低價")
-        plt.subplots(224)
+        plt.subplot(224)
         self.plot_return_predict("收盤價")
         plt.show()
         return 0
@@ -151,8 +151,8 @@ class TimeSeriesAnalysis:
         model_result = self.model[key + postfix]
         r_hat = model_result.predict(1, self.period, sample[key + postfix].values)
         t = sample.index
-        plt.plot(t, sample[key + postfix].values, legend=translate[key])
-        plt.plot(t, r_hat)
+        plt.plot(t, sample[key + postfix].values, label=translate[key])
+        plt.plot(t, -r_hat, label=translate[key] + "_hat")
         plt.legend()
         return 0
 
@@ -170,23 +170,11 @@ if __name__ == '__main__':
     #md = Model()
     #md.intersection_selection(3000, 7)
     #md.build_holt_model()
+
     api = db.StockAPI()
-    df = TWStockDataFrame(api.select_symbol(2330))
-    df.convert_date()
-    print(df)
-    df.eval_log_return("收盤價")
-    df = df.iloc[-250:]
-    lrtn = df["收盤價報酬率"]
-    price = df["收盤價"]
-    model = ARIMA(lrtn.values[:-1], order=(3, 1, 1))
-    model_result = model.fit()
-    pred = model_result.predict(1, 252, lrtn.values[:-1])
-    t = np.arange(len(lrtn))
-    plt.plot(t, lrtn, label="true")
-    t = np.arange(len(pred))
-    plt.plot(t, -pred, label="pred")
-    plt.legend()
-    plt.show()
+    tsa = TimeSeriesAnalysis(api.select_symbol(2330))#
+    tsa.build_ARIMA_model()
+    tsa.view_return_predict()
 
 
 
