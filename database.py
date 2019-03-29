@@ -3,10 +3,11 @@ import locale
 from locale import atoi
 from locale import atof
 import pandas as pd
+import numpy as np
 
 
 class StockAPI:
-    def __init__(self, src):
+    def __init__(self, src='stock.db'):
         self.src = src
         self.conn = sqlite3.connect(src)
         self.cursor = self.conn.cursor()
@@ -76,7 +77,7 @@ class StockAPI:
         dict_data = {}
         for idx, key in enumerate(index):
             dict_data[key] = t[idx]
-        self.coverter(dict_data)
+        self.covertor(dict_data)
         return dict_data
 
     def structure_protect(self, data, date):
@@ -135,7 +136,7 @@ class StockAPI:
             dict_data["本益比"] = atof(data["本益比"])
         return dict_data
 
-    def coverter(self, data):
+    def covertor(self, data):
         data["日期"] = str(data["日期"])
         data["證券代號"] = str(data["證券代號"])
         data["證券名稱"] = str(data["證券名稱"])
@@ -149,22 +150,22 @@ class StockAPI:
             try:
                 data["開盤價"] = atof(data["開盤價"])
             except ValueError:
-                data["開盤價"] = ''
+                data["開盤價"] = np.nan
         if type(data["最高價"]) == str:
             try:
                 data["最高價"] = atof(data["最高價"])
             except ValueError:
-                data["最高價"] = ''
+                data["最高價"] = np.nan
         if type(data["收盤價"]) == str:
             try:
                 data["收盤價"] = atof(data["收盤價"])
             except ValueError:
-                data["收盤價"] = ''
+                data["收盤價"] = np.nan
         if type(data["最低價"]) == str:
             try:
                 data["最低價"] = atof(data["最低價"])
             except ValueError:
-                data["最低價"] = ''
+                data["最低價"] = np.nan
         data["漲跌"] = str(data["漲跌"])
         if type(data["漲跌價差"]) == str:
             data["漲跌價差"] = atof(data["漲跌價差"])
@@ -172,22 +173,22 @@ class StockAPI:
             try:
                 data["最後揭示買價"] = atof(data["最後揭示買價"])
             except ValueError:
-                data["最後揭示買價"] = ''
+                data["最後揭示買價"] = np.nan
         if type(data["最後揭示買量"]) == str:
             try:
                 data["最後揭示買量"] = atoi(data["最後揭示買量"])
             except ValueError:
-                data["最後揭示買量"] = ''
+                data["最後揭示買量"] = np.nan
         if type(data["最後揭示賣價"]) == str:
             try:
                 data["最後揭示賣價"] = atof(data["最後揭示賣價"])
             except ValueError:
-                data["最後揭示買價"] = ''
+                data["最後揭示買價"] = np.nan
         if type(data["最後揭示賣量"]) == str:
             try:
                 data["最後揭示賣量"] = atof(data["最後揭示賣量"])
             except ValueError:
-                data["最後揭示賣量"] = ''
+                data["最後揭示賣量"] = np.nan
         if type(data["本益比"]) == str:
             data["本益比"] = atof(data["本益比"])
         return 0

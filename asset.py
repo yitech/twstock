@@ -10,6 +10,12 @@ class Position(IntEnum):
     Short = 0
 
 
+class Trade(IntEnum):
+    PreTrade = 0
+    InTrade = 1
+    PostTrade = 2
+
+
 class Asset:
     def __init__(self, ntd, src='stock.db'):
         self.ntd = ntd
@@ -44,11 +50,13 @@ class Asset:
 
 
 class Ticket:
-    def __init__(self, date, security, lot, position):
+    def __init__(self, date, symbol, price, lot, position, trade):
         self.date = date
-        self.security = security
+        self.symbol = symbol
+        self.price = price
         self.lot = lot
         self.position = position
+        self.trade = trade
 
 
 class Market:
